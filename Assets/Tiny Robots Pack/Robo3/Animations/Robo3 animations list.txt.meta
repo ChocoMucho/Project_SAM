@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 70dfccde2901e824d9ba6b21b70e6ffb
+timeCreated: 1507746646
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 98930
+  packageName: Tiny Robots Pack
+  packageVersion: 1.1
+  assetPath: Assets/Robo3/Animations/Robo3 animations list.txt
+  uploadId: 207042

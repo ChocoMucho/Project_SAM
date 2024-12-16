@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 11134d1ebf2bb02409ec4c45871fc2d0
+timeCreated: 1508430561
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 98930
+  packageName: Tiny Robots Pack
+  packageVersion: 1.1
+  assetPath: Assets/Prefabs/Robo3.prefab
+  uploadId: 207042
