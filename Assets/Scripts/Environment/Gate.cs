@@ -11,7 +11,7 @@ public enum GateState
 
 public class Gate : MonoBehaviour
 {
-    float moveSpeed = 2f;
+    float moveSpeed = 0.5f;
     Vector3 InitPosition;
     Vector3 targetPosition;
     void Start()
