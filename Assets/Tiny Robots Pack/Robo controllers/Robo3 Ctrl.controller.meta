@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a85d33bbd41f13e46b011800a89d7698
+timeCreated: 1507746749
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 98930
+  packageName: Tiny Robots Pack
+  packageVersion: 1.1
+  assetPath: Assets/Robo controllers/Robo3 Ctrl.controller
+  uploadId: 207042
