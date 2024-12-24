@@ -96,7 +96,7 @@ public class MainGateScene : BaseScene
     IEnumerator SpawnRoutine() // 얘 호출되면 스포닝 시작
     {
         SpwanEnemy(Enemy.Turret, 1);
-        SpwanEnemy(Enemy.Puncher, 1);
+        //SpwanEnemy(Enemy.Puncher, 1);
         yield return new WaitForSeconds(3f);
 
         _spawnEnd = true;

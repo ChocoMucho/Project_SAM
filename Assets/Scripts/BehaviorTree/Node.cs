@@ -8,7 +8,7 @@ public class Node
     public readonly List<Node> Children;
     protected int currentChild; // ¿Œµ¶Ω∫
 
-    public Node(string name)
+    public Node(string name, int priority = 0)
     {
         this.name = name;
         Children = new List<Node>();

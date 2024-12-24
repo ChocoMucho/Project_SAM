@@ -1,15 +1,17 @@
 using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class Puncher : MonoBehaviour, IDamageable
 {
-    [SerializeField] float _stopDistance;
+    [SerializeField] public float _stopDistance;
     [SerializeField] float _attackTimeout;
 
     //=====Status=====
-    [SerializeField] StatusSO statusSO;
+    [SerializeField] StatusSO statusSO; 
     public int MaxHP { get; private set; }
     public int CurrentHP { get; private set; }
     public int Damage { get; private set; }
@@ -26,12 +28,19 @@ public class Puncher : MonoBehaviour, IDamageable
     [SerializeField] Slider _hpBar; 
 
 
+    //=====Behavior Tree=====
+    BehaviorTree _tree;
+    [SerializeField] private List<Transform> patrolPoints;
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
 
         _agent.stoppingDistance = _stopDistance;
+
+        _tree = new BehaviorTree("Puncher");
+        _tree.AddChild(new Leaf("Patrol", new PatrolStrategy(transform, _agent, patrolPoints)));
     }
 
     void Start()
@@ -43,7 +52,8 @@ public class Puncher : MonoBehaviour, IDamageable
 
     void Update()
     {
-        Chase();
+        _tree.Process();
+        //Chase();
         _attackTimeoutDelta += Time.deltaTime;
     }
 
