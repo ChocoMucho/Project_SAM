@@ -8,13 +8,10 @@ public class GameManager : Singleton<GameManager>
         _dontDestroyOnLoad = true;
         base.Init();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SceneManager.LoadScene("MainGate");
     }
 
-    // Update is called once per frame
     void Update()
     {
         

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public enum Scene
 {
     Unknown,
-    Lobby,
+    Main,
     Battle,
 }
 
