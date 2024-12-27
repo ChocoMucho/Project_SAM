@@ -46,6 +46,9 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private Image _hpBar;
     [SerializeField] private Text _ammo;
 
+    //=====Behavior Tree=====
+    BehaviorTree _tree;
+
     private void Awake()
     {
         _input = GetComponent<PlayerInputs>();
@@ -55,6 +58,8 @@ public class Player : MonoBehaviour, IDamageable
         Animator = GetComponent<Animator>();
 
         _rigBuilder = GetComponent<RigBuilder>();
+
+        _tree = new BehaviorTree("PlayerTree");
     }
 
     void Start()
@@ -66,15 +71,17 @@ public class Player : MonoBehaviour, IDamageable
         CurrentAmmo = MaxAmmo;
 
         InitStatus();
+        BTSet();
     }
 
     void Update()
     {
+        _tree.Process();
         UpdateUI();
         if (IsDead) return;
 
         CheckRun();
-        if (_input.reload)
+        if (_input.Reload)
             TryReloading();
         Aim();
     }
@@ -88,7 +95,7 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Aim()
     {
-        if (_input.aim && !IsReloading && !IsRunning)
+        if (_input.Aim && !IsReloading && !IsRunning)
         {
             AimControll(true);
 
@@ -105,7 +112,7 @@ public class Player : MonoBehaviour, IDamageable
 
             transform.forward = Vector3.Lerp(transform.forward, playerDirection, Time.deltaTime * 20f);
 
-            if(_input.fire && !IsReloading)
+            if(_input.Fire && !IsReloading)
             {
                 _weapon.Fire(_targetedPosition);
             }           
@@ -146,7 +153,7 @@ public class Player : MonoBehaviour, IDamageable
 
     public bool TryReloading()
     {
-        _input.reload = false;
+        _input.Reload = false;
 
         if (IsReloading)
             return false;
@@ -221,7 +228,7 @@ public class Player : MonoBehaviour, IDamageable
     // 달리면 장전 애니메이션, 장전 상태 다 제한 걸어야 해서 만듦
     private void CheckRun() // TODO: 진짜 조정 필요.
     {
-        if(_input.run) // 헷갈려서 나눠놓긴 했는데, 그냥 인풋런 값으로 대입해도 괜찮긴하다.
+        if(_input.Run) // 헷갈려서 나눠놓긴 했는데, 그냥 인풋런 값으로 대입해도 괜찮긴하다.
         {
             IsRunning = true;
             Animator.SetBool(PlayerAnimatorHashes.Run, true);
@@ -232,5 +239,10 @@ public class Player : MonoBehaviour, IDamageable
             IsRunning = false;
             Animator.SetBool(PlayerAnimatorHashes.Run, false);
         }
+    }
+
+    private void BTSet()
+    {
+
     }
 }

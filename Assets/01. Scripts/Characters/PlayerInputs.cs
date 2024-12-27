@@ -9,11 +9,11 @@ public class PlayerInputs : MonoBehaviour
     [Header("ÀÎÇ² °ª")]
     public Vector2 move;
     public Vector2 look;
-    public bool jump;
-    public bool aim;
-    public bool run;
-    public bool fire;
-    public bool reload;
+    public bool Jump { get; set; }
+    public bool Aim { get; set; }
+    public bool Run { get; set; }
+    public bool Fire { get; set; }
+    public bool Reload { get; set; }
 
     #region receipt value
     public void OnMove(InputValue value) => MoveInput(value.Get<Vector2>());
@@ -28,10 +28,10 @@ public class PlayerInputs : MonoBehaviour
     #region restore value
     private void MoveInput(Vector2 moveDirection) => move = moveDirection;
     private void LookInput(Vector2 lookDirection) => look = lookDirection; 
-    private void JumpInput(bool isPressed) => jump = isPressed;
-    private void AimInput(bool isPressed) => aim = isPressed;
-    private void RunInput(bool isPressed) => run = isPressed;
-    private void FireInput(bool isPressed) => fire = isPressed;
-    private void ReloadInput(bool isPressed) => reload = isPressed;
+    private void JumpInput(bool isPressed) => Jump = isPressed;
+    private void AimInput(bool isPressed) => Aim = isPressed;
+    private void RunInput(bool isPressed) => Run = isPressed;
+    private void FireInput(bool isPressed) => Fire = isPressed;
+    private void ReloadInput(bool isPressed) => Reload = isPressed;
     #endregion
 }
