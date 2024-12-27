@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     //=====Player Move Timeout=====
     [field: SerializeField] public float JumpTimeout { get; private set; } = 0.3f;
     [field: SerializeField] public float FallTimeout { get; private set; } = 0.1f;
-    private float JumpTimeoutDelta;
+    private float JumpTimeoutDelta; // 0이 돼야 점프 가능
     private float FallTimeoutDelta;
 
     //player move value
