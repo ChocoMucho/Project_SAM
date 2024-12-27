@@ -9,8 +9,14 @@ public abstract class BaseState : IState
     protected BaseState _currentSuperState;
     protected BaseState _currentSubState;
 
-    public virtual void EnterState() { }
-    public virtual void UpdateState() { }
+    public BaseState(StateMachine StateMachine, StateProvider Provider)
+    {
+        this.StateMachine = StateMachine;
+        this.Provider = Provider; 
+    }
+
+    public virtual void EnterState() { InitializeSubState(); }
+    public virtual void UpdateState() { CheckSwitchState(); }
     public virtual void ExitState() { }
     public virtual void CheckSwitchState() { }
     public virtual void InitializeSubState() { }
