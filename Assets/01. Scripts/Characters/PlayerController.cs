@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviour
             if (IsGround && _verticalVelocity <= 0.0f)
                 _verticalVelocity = -2f;
 
-            if (_input.jump && JumpTimeoutDelta <= 0f)
+            if (_input.Jump && JumpTimeoutDelta <= 0f)
             {
                 _verticalVelocity = Mathf.Sqrt(JumpHeight * 2 * -Gravity);
             }
@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             JumpTimeoutDelta = JumpTimeout;
-            _input.jump = false;
+            _input.Jump = false;
         }
         
 
@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         float targetSpeed = WalkSpeed;
-        if(_input.run)
+        if(_input.Run)
             targetSpeed = RunSpeed;
 
         float inputMagnitude = _input.move.magnitude;

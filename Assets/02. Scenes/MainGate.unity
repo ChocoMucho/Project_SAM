@@ -1395,11 +1395,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
-  jump: 0
-  aim: 0
-  run: 0
-  fire: 0
-  reload: 0
 --- !u!114 &278451981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4650,7 +4645,7 @@ PrefabInstance:
       objectReference: {fileID: 196754143}
     - target: {fileID: 7772757517353541338, guid: f8e6145ff41e77847b10941a9aaecbac, type: 3}
       propertyPath: m_VersionIndex
-      value: 1327
+      value: 1330
       objectReference: {fileID: 0}
     - target: {fileID: 7818387736605937426, guid: f8e6145ff41e77847b10941a9aaecbac, type: 3}
       propertyPath: m_Mesh
@@ -5876,7 +5871,7 @@ PrefabInstance:
       objectReference: {fileID: 401329393}
     - target: {fileID: 7623839999874171501, guid: 1629216e485cf4647a5994d8ae425f78, type: 3}
       propertyPath: m_VersionIndex
-      value: 955
+      value: 958
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8257,7 +8252,7 @@ PrefabInstance:
       objectReference: {fileID: 894111239}
     - target: {fileID: 312765083454646772, guid: 0e7936effdf7f4c4ab90e5ded0bd8f77, type: 3}
       propertyPath: m_VersionIndex
-      value: 8307
+      value: 8310
       objectReference: {fileID: 0}
     - target: {fileID: 1610433695575443748, guid: 0e7936effdf7f4c4ab90e5ded0bd8f77, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8585,11 +8580,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
-  jump: 0
-  aim: 0
-  run: 0
-  fire: 0
-  reload: 0
 --- !u!114 &5623056570415259725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9644,7 +9634,7 @@ PrefabInstance:
       objectReference: {fileID: 2080124101}
     - target: {fileID: 8368987014483817332, guid: 97b71621da25f934d83f3d3f1090d2a6, type: 3}
       propertyPath: m_VersionIndex
-      value: 2147
+      value: 2150
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9958,11 +9948,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   look: {x: 0, y: 0}
-  jump: 0
-  aim: 0
-  run: 0
-  fire: 0
-  reload: 0
 --- !u!114 &7639234951622679534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10383,7 +10368,7 @@ PrefabInstance:
       objectReference: {fileID: 1726753587}
     - target: {fileID: 6419248290454492442, guid: 6cf2f2bb4e83c8a45b8105e7d2f46e27, type: 3}
       propertyPath: m_VersionIndex
-      value: 3198
+      value: 3201
       objectReference: {fileID: 0}
     - target: {fileID: 6753961179502264928, guid: 6cf2f2bb4e83c8a45b8105e7d2f46e27, type: 3}
       propertyPath: m_Mesh
