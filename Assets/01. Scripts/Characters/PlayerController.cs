@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public float SpeedChangeRate { get; private set; } = 10.0f;
 
     //=====Ground and Air=====
-    [field: SerializeField] public bool IsGround { get; private set; } = false;
     [field: SerializeField] public float GroundedRadius { get; private set; }
     private float GroundedOffset = -0.14f;
     [field: SerializeField] public LayerMask GroundLayers;
@@ -35,6 +34,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 _targetDirection;
     private float _animationBlend;
     private Vector2 _animationBlend2;
+
+    //=====States=====
+    [field: SerializeField] public bool IsGround { get; private set; } = false;
+    [field: SerializeField] public bool IsFalling { get; private set; } = false;
+    [field: SerializeField] public bool IsRunning { get; private set; } = false;
 
     //=====Camera=====
     [field: SerializeField] public Transform CameraRoot { get; private set; }
@@ -136,6 +140,7 @@ public class PlayerController : MonoBehaviour
         if(IsGround)
         {
             FallTimeoutDelta = FallTimeout;
+            IsFalling = false;
 
             if (IsGround && _verticalVelocity <= 0.0f)
                 _verticalVelocity = -2f;
@@ -150,6 +155,11 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            if (FallTimeoutDelta >= 0f)
+                FallTimeoutDelta -= Time.deltaTime;
+            else
+                IsFalling = true;
+
             JumpTimeoutDelta = JumpTimeout;
             _input.Jump = false;
         }
@@ -176,25 +186,24 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float targetSpeed = WalkSpeed;
-        if(_input.Run)
-            targetSpeed = RunSpeed;
-
+        float targetSpeed;
         float inputMagnitude = _input.move.magnitude;
 
-        if (_input.move == Vector2.zero)
+        if (_input.move == Vector2.zero) // 방향키 입력 없음
         {
             targetSpeed = 0;
         }
         else 
         {
-            //회전
+            // 속도 변화 및 상태 변화
+            targetSpeed = _input.Run ? RunSpeed : WalkSpeed;
+            IsRunning = _input.Run;
+
+            // 회전
             float yaw = Mathf.SmoothDampAngle(transform.eulerAngles.y, _playerTargetYaw, ref _playerRotationVelocity, RotationSmoothTime);
             
             if(!_player.IsAiming)
-            {
                 transform.rotation = Quaternion.Euler(0f, yaw, 0f);
-            }
         }       
 
         _speed = targetSpeed;       

@@ -11,17 +11,19 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask layerMask = new LayerMask();
     [SerializeField] private Transform _cameraRoot;
     [SerializeField] private GameObject _weaponObject;
-    [SerializeField] private Transform _aimDebugObject;
     private Vector3 _targetedPosition;
-    private Camera _mainCamera;
+    public Camera MainCamera;
+    public GameObject AimCamera => _aimCamera;
 
     //=====Weapon=====
     public int MaxAmmo { get; private set; } = 300;
     public int CurrentAmmo { get; set; }
+    public Weapon Weapon { get; private set; }
 
     //=====Animation Rigging=====
     private RigBuilder _rigBuilder;
     private Dictionary<string, Rig> _rigLayersDictionanry = new Dictionary<string, Rig>();
+    public GameObject TargetObject { get; set; }
 
     //=====Status=====
     [SerializeField] StatusSO statusSO;
@@ -32,58 +34,57 @@ public class Player : MonoBehaviour, IDamageable
     public event Action OnDeath;
 
     //=====States=====
+    public bool IsRunning => Controller.IsRunning;
     public bool IsAiming { get; set; } = false;
     public bool IsReloading { get; set; } = false;
-    public bool IsRunning { get; private set; }
+    public bool IsGround => Controller.IsGround;
+    public bool IsFalling => Controller.IsFalling;
 
     //=====References=====
     public Animator Animator { get; private set; }
-    private PlayerInputs _input;
-    private PlayerController _controller;
-    private Weapon _weapon;
+    public PlayerInputs Input { get; private set; }
+    public PlayerController Controller { get; private set; }
+
+
+    //=====FSM=====
+    public StateMachine stateMachine { get; private set; }
 
     //=====UI=====
     [SerializeField] private Image _hpBar;
     [SerializeField] private Text _ammo;
 
-    //=====Behavior Tree=====
-    BehaviorTree _tree;
-
     private void Awake()
     {
-        _input = GetComponent<PlayerInputs>();
-        _controller = GetComponent<PlayerController>();
+        Input = GetComponent<PlayerInputs>();
+        Controller = GetComponent<PlayerController>();
         if(_weaponObject != null)
-            _weapon = _weaponObject.GetComponent<Weapon>();
+            Weapon = _weaponObject.GetComponent<Weapon>();
         Animator = GetComponent<Animator>();
-
         _rigBuilder = GetComponent<RigBuilder>();
-
-        _tree = new BehaviorTree("PlayerTree");
+        stateMachine = GetComponent<StateMachine>();
+        RigInit();
     }
 
     void Start()
     {
-        _mainCamera = Camera.main;
+        MainCamera = Camera.main;
         _aimCamera.SetActive(false);
-        RigInit();
-
+        
+        
         CurrentAmmo = MaxAmmo;
 
         InitStatus();
-        BTSet();
     }
 
     void Update()
     {
-        _tree.Process();
         UpdateUI();
         if (IsDead) return;
 
-        CheckRun();
-        if (_input.Reload)
-            TryReloading();
-        Aim();
+        //CheckRun();
+        /*if (Input.Reload)
+            TryReloading();*/
+        //Aim();
     }
 
     private void InitStatus()
@@ -95,15 +96,14 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Aim()
     {
-        if (_input.Aim && !IsReloading && !IsRunning)
+        if (Input.Aim && !IsReloading && !IsRunning)
         {
             AimControll(true);
 
-            Transform camera = _mainCamera.transform;
+            Transform camera = MainCamera.transform;
             if (Physics.Raycast(camera.position, camera.forward, out RaycastHit hit, 1000))
             {
                 _targetedPosition = hit.point;
-                _aimDebugObject.position = _targetedPosition;
             }
 
             Vector3 tempVector = _targetedPosition;
@@ -112,10 +112,10 @@ public class Player : MonoBehaviour, IDamageable
 
             transform.forward = Vector3.Lerp(transform.forward, playerDirection, Time.deltaTime * 20f);
 
-            if(_input.Fire && !IsReloading)
+            if (Input.Fire && !IsReloading)
             {
-                _weapon.Fire(_targetedPosition);
-            }           
+                Weapon.Fire(_targetedPosition);
+            }
         }
         else
         {
@@ -135,50 +135,26 @@ public class Player : MonoBehaviour, IDamageable
                 layerWeight = 1.0f;
             Animator.SetLayerWeight(1, Mathf.Lerp(layerWeight, 1, Time.deltaTime * 10f));
             SetRigWeight("RigUpperBodyLayer");
-            if(IsReloading)
-                SetRigWeight("RigHandLayer", 0f); // 장전중일 때 리깅되면 부자연스럽
-            else
-                SetRigWeight("RigHandLayer"); 
+            if (!IsReloading)
+                SetRigWeight("RigHandLayer"); // 장전중일 때 리깅되면 부자연스럽
         }
         else
         {
-            if(IsReloading)
-                Animator.SetLayerWeight(1, Mathf.Lerp(layerWeight, 1, Time.deltaTime * 10f));
-            else
-                Animator.SetLayerWeight(1, Mathf.Lerp(layerWeight, 0, Time.deltaTime * 10f));
             SetRigWeight("RigUpperBodyLayer", 0.0f);
             SetRigWeight("RigHandLayer", 0.0f);
         }
     }
 
-    public bool TryReloading()
-    {
-        _input.Reload = false;
-
-        if (IsReloading)
-            return false;
-
-        if (CurrentAmmo <= 0)
-            return false;
-        else
-        {
-            Animator.SetTrigger(PlayerAnimatorHashes.Reload);
-            IsReloading = true;
-        }
-
-        return true;
-    }
-
     public void Reload()// 애니메이션 이벤트 등록
     {
-        if(CurrentAmmo >= _weapon.AmmoCapacity) // 잔탄 넉넉
+        if(CurrentAmmo >= Weapon.AmmoCapacity) // 잔탄 넉넉
         {
-            _weapon.CurrentAmmo = _weapon.AmmoCapacity;
-            CurrentAmmo -= _weapon.AmmoCapacity;
+            Weapon.CurrentAmmo = Weapon.AmmoCapacity;
+            CurrentAmmo -= Weapon.AmmoCapacity;
         }
-        else if(CurrentAmmo < _weapon.AmmoCapacity && CurrentAmmo > 0) // 잔탄 소량
+        else if(CurrentAmmo < Weapon.AmmoCapacity && CurrentAmmo > 0) // 잔탄 소량
         {
-            _weapon.CurrentAmmo = CurrentAmmo;
+            Weapon.CurrentAmmo = CurrentAmmo;
             CurrentAmmo = 0;
         }
 
@@ -189,16 +165,34 @@ public class Player : MonoBehaviour, IDamageable
 
     private void RigInit() // 딕셔너리에 이름이랑 리그레이어
     {
+        TargetObject = new GameObject("TargetObject");
+
         foreach(RigLayer rigLayer in _rigBuilder.layers)
         {
-            _rigLayersDictionanry[rigLayer.name] = rigLayer.rig;
-        }        
+            if(null != rigLayer.rig)
+            {
+                _rigLayersDictionanry[rigLayer.name] = rigLayer.rig;
+
+                MultiAimConstraint multiAimConstraint = rigLayer.rig.GetComponentInChildren<MultiAimConstraint>();
+                if(null != multiAimConstraint)
+                {
+                    WeightedTransformArray sourceObject = multiAimConstraint.data.sourceObjects;
+                    sourceObject.Add(new WeightedTransform(TargetObject.transform, 1.0f));
+                    multiAimConstraint.data.sourceObjects = sourceObject;
+                }
+            }
+            else
+                Debug.LogWarning($"Rig '{rigLayer.name}' is null.");
+        }
     }
 
-    private void SetRigWeight(string rigLayerName, float weight = 1.0f)
+    public void SetRigWeight(string rigLayerName, float weight = 1.0f)
     {
         _rigLayersDictionanry.TryGetValue(rigLayerName, out Rig rig);
-        rig.weight = Mathf.Lerp(rig.weight, weight, Time.deltaTime * 20f);
+        if(null != rig)
+            rig.weight = Mathf.Lerp(rig.weight, weight, Time.deltaTime * 20f);
+        else
+            Debug.LogWarning($"Rig '{rig.name}' is null.");
     }
 
     public void TakeDamage(int damage)
@@ -222,15 +216,15 @@ public class Player : MonoBehaviour, IDamageable
     private void UpdateUI()
     {
         _hpBar.fillAmount = (float)CurrentHP / MaxHP;
-        _ammo.text = $"{_weapon.CurrentAmmo} / {CurrentAmmo}";
+        _ammo.text = $"{Weapon.CurrentAmmo} / {CurrentAmmo}";
     }
 
     // 달리면 장전 애니메이션, 장전 상태 다 제한 걸어야 해서 만듦
-    private void CheckRun() // TODO: 진짜 조정 필요.
+    /*private void CheckRun() // TODO: 진짜 조정 필요.
     {
-        if(_input.Run) // 헷갈려서 나눠놓긴 했는데, 그냥 인풋런 값으로 대입해도 괜찮긴하다.
+        if(Input.Run) // 헷갈려서 나눠놓긴 했는데, 그냥 인풋런 값으로 대입해도 괜찮긴하다.
         {
-            IsRunning = true;
+            IsRunning = true;   
             Animator.SetBool(PlayerAnimatorHashes.Run, true);
             IsReloading = false;
         }
@@ -239,10 +233,5 @@ public class Player : MonoBehaviour, IDamageable
             IsRunning = false;
             Animator.SetBool(PlayerAnimatorHashes.Run, false);
         }
-    }
-
-    private void BTSet()
-    {
-
-    }
+    }*/
 }

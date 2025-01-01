@@ -13,7 +13,7 @@ public class BehaviorTree : Node
         {
             return status;
         }
-        currentChild = (currentChild + 1) % Children.Count;
+        currentChild = (currentChild + 1) % Children.Count; // 무한 순회
 
         return Status.Success;
     }
