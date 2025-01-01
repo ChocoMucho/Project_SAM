@@ -6,7 +6,7 @@ public class StateMachine : MonoBehaviour
     public PlayerController Controller { get; private set; }
     public StateProvider StateProvider { get; private set; }
     public Animator Animator { get; private set; }
-    public BaseState CurrentState { get; set; } //?????¡× ????
+    public BaseState CurrentState { get; set; }
 
     private void Awake()
     {

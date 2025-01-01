@@ -5,6 +5,7 @@ public enum PlayerStates
     Ground,
     Air,
 
+    Idle,
     Run,
     Reload,
     Aim,

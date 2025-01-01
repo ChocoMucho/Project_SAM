@@ -10,23 +10,26 @@ public class GroundState : BaseState
     public override void EnterState()
     {
         base.EnterState();
-        // 애니메이터 Ground 체크
+        StateMachine.Animator.SetBool(PlayerAnimatorHashes.Grounded, true);
     }
-
-    public override void UpdateState() { CheckSwitchState(); }
 
     public override void ExitState() 
     {
         // 애니메이터 Ground 파라미터 false로
+        StateMachine.Animator.SetBool(PlayerAnimatorHashes.Grounded, false);
     }
 
     public override void CheckSwitchState() 
     {
         // 플레이어 컨트롤러에서 IsGround 로 상태 업데이트
+        if(!StateMachine.Player.Controller.IsGround)
+        {
+            SwitchState(Provider.GetState(PlayerStates.Air));
+        }        
     }
 
     public override void InitializeSubState() 
     {
-        //Idle 부여
+        SetSubState(Provider.GetState(PlayerStates.Idle));
     }
 }

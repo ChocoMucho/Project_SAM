@@ -308,10 +308,10 @@ MonoBehaviour:
   m_Data:
     m_ConstrainedObject: {fileID: 8532848439075931838}
     m_SourceObjects:
-      m_Length: 1
+      m_Length: 0
       m_Item0:
-        transform: {fileID: 1549236236}
-        weight: 1
+        transform: {fileID: 0}
+        weight: 0
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -1298,13 +1298,15 @@ MonoBehaviour:
   <JumpHeight>k__BackingField: 1.2
   <RotationSmoothTime>k__BackingField: 0.1
   <SpeedChangeRate>k__BackingField: 10
-  <IsGround>k__BackingField: 0
   <GroundedRadius>k__BackingField: 0
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
   <JumpTimeout>k__BackingField: 0.5
   <FallTimeout>k__BackingField: 0.1
+  <IsGround>k__BackingField: 0
+  <IsFalling>k__BackingField: 0
+  <IsRunning>k__BackingField: 0
   <CameraRoot>k__BackingField: {fileID: 1271518183}
   <TopClamp>k__BackingField: 70
   <BottomClamp>k__BackingField: -30
@@ -1413,7 +1415,7 @@ MonoBehaviour:
     m_Bits: 0
   _cameraRoot: {fileID: 0}
   _weaponObject: {fileID: 0}
-  _aimDebugObject: {fileID: 0}
+  MainCamera: {fileID: 0}
   statusSO: {fileID: 0}
   _hpBar: {fileID: 0}
   _ammo: {fileID: 0}
@@ -2983,10 +2985,10 @@ MonoBehaviour:
   m_Data:
     m_ConstrainedObject: {fileID: 543450652459943312}
     m_SourceObjects:
-      m_Length: 1
+      m_Length: 0
       m_Item0:
-        transform: {fileID: 1549236236}
-        weight: 1
+        transform: {fileID: 0}
+        weight: 0
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -3036,7 +3038,7 @@ GameObject:
   - component: {fileID: 1369527665}
   - component: {fileID: 1369527664}
   - component: {fileID: 1369527669}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MainGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5813,6 +5815,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1089368235}
     m_Modifications:
+    - target: {fileID: 2761488830440575769, guid: 1629216e485cf4647a5994d8ae425f78, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2994693752014254888, guid: 1629216e485cf4647a5994d8ae425f78, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -5820,6 +5826,10 @@ PrefabInstance:
     - target: {fileID: 5739272163689572297, guid: 1629216e485cf4647a5994d8ae425f78, type: 3}
       propertyPath: m_Name
       value: GateFrame
+      objectReference: {fileID: 0}
+    - target: {fileID: 5739272163689572297, guid: 1629216e485cf4647a5994d8ae425f78, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6122717984642007840, guid: 1629216e485cf4647a5994d8ae425f78, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8306,6 +8316,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Corridor
       objectReference: {fileID: 0}
+    - target: {fileID: 6482733180753624133, guid: 0e7936effdf7f4c4ab90e5ded0bd8f77, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8598,13 +8612,15 @@ MonoBehaviour:
   <JumpHeight>k__BackingField: 1.2
   <RotationSmoothTime>k__BackingField: 0.1
   <SpeedChangeRate>k__BackingField: 10
-  <IsGround>k__BackingField: 0
   <GroundedRadius>k__BackingField: 0
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
   <JumpTimeout>k__BackingField: 0.3
   <FallTimeout>k__BackingField: 0.1
+  <IsGround>k__BackingField: 0
+  <IsFalling>k__BackingField: 0
+  <IsRunning>k__BackingField: 0
   <CameraRoot>k__BackingField: {fileID: 0}
   <TopClamp>k__BackingField: 70
   <BottomClamp>k__BackingField: -30
@@ -8629,7 +8645,7 @@ MonoBehaviour:
     m_Bits: 192
   _cameraRoot: {fileID: 0}
   _weaponObject: {fileID: 0}
-  _aimDebugObject: {fileID: 879885648}
+  MainCamera: {fileID: 0}
   statusSO: {fileID: 0}
   _hpBar: {fileID: 0}
   _ammo: {fileID: 0}
@@ -9580,6 +9596,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate
       objectReference: {fileID: 0}
+    - target: {fileID: 735385532954808867, guid: 97b71621da25f934d83f3d3f1090d2a6, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4984500917233989184, guid: 97b71621da25f934d83f3d3f1090d2a6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -9892,6 +9912,7 @@ GameObject:
   - component: {fileID: 4012707056744815403}
   - component: {fileID: 7639234951622679536}
   - component: {fileID: 7639234951622679535}
+  - component: {fileID: 7639234951622679539}
   - component: {fileID: 7639234951622679534}
   - component: {fileID: 7639234951622679533}
   - component: {fileID: 7639234951622679532}
@@ -9966,13 +9987,15 @@ MonoBehaviour:
   <JumpHeight>k__BackingField: 1.2
   <RotationSmoothTime>k__BackingField: 0.1
   <SpeedChangeRate>k__BackingField: 10
-  <IsGround>k__BackingField: 0
   <GroundedRadius>k__BackingField: 0
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
   <JumpTimeout>k__BackingField: 0.3
   <FallTimeout>k__BackingField: 0.1
+  <IsGround>k__BackingField: 0
+  <IsFalling>k__BackingField: 0
+  <IsRunning>k__BackingField: 0
   <CameraRoot>k__BackingField: {fileID: 2009930299}
   <TopClamp>k__BackingField: 70
   <BottomClamp>k__BackingField: -30
@@ -9997,7 +10020,7 @@ MonoBehaviour:
     m_Bits: 192
   _cameraRoot: {fileID: 2009930299}
   _weaponObject: {fileID: 919132148255170346}
-  _aimDebugObject: {fileID: 1549236236}
+  MainCamera: {fileID: 0}
   statusSO: {fileID: 11400000, guid: 0b9ce0b68cb2ba9479e36a353a130ff2, type: 2}
   _hpBar: {fileID: 961144654}
   _ammo: {fileID: 1539736669}
@@ -10129,6 +10152,18 @@ MonoBehaviour:
   - m_Rig: {fileID: 141543078}
     m_Active: 1
   m_Effectors: []
+--- !u!114 &7639234951622679539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7639234951622679531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dd43ff2762d3794494a63a29f63e9bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &7658786069000643875
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10361,6 +10396,10 @@ PrefabInstance:
     - target: {fileID: 4829873823531642250, guid: 6cf2f2bb4e83c8a45b8105e7d2f46e27, type: 3}
       propertyPath: m_Name
       value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 4829873823531642250, guid: 6cf2f2bb4e83c8a45b8105e7d2f46e27, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6419248290454492442, guid: 6cf2f2bb4e83c8a45b8105e7d2f46e27, type: 3}
       propertyPath: m_Mesh

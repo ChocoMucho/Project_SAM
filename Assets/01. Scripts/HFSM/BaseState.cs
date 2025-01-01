@@ -13,11 +13,19 @@ public abstract class BaseState : IState
     {
         this.StateMachine = StateMachine;
         this.Provider = Provider; 
+        Player = this.StateMachine.Player;
     }
 
-    public virtual void EnterState() { InitializeSubState(); }
+    public virtual void EnterState() 
+    { 
+        InitializeSubState();
+        _currentSubState?.EnterState();
+    }
     public virtual void UpdateState() { CheckSwitchState(); }
-    public virtual void ExitState() { }
+    public virtual void ExitState() 
+    {
+        _currentSubState?.ExitState();
+    }
     public virtual void CheckSwitchState() { }
     public virtual void InitializeSubState() { }
 
