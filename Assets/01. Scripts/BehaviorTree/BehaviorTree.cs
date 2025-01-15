@@ -9,6 +9,7 @@ public class BehaviorTree : Node
     public override Status Process()
     {
         Status status = Children[currentChild].Process();
+        Debug.Log(Children[currentChild].name);
         if(status != Status.Success) // 성공 리턴만 아니면 계속 똑같은 자식의 process 호출함.
         {
             return status;
