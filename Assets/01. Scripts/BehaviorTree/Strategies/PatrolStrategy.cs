@@ -19,35 +19,22 @@ public class PatrolStrategy : IStrategy
     }
 
     public Status Process()
-    {
-        if(currentIndex >= points.Count) return Status.Success; // 다 돌았으면 성공 리턴
-
+    {      
         Transform target = points[currentIndex];
         agent.stoppingDistance = 0;
 
-        if (currentIndex == 0) agent.SetDestination(target.position);
+        if (currentIndex == 0) 
+            agent.SetDestination(target.position);
 
-        if (!agent.pathPending && agent.remainingDistance <= 0.1f)
+        float distance = Vector3.Distance(entity.position, target.position);
+        if (distance <= 0.1f) // !agent.pathPending && 
         {
             ++currentIndex;
+            if (currentIndex == points.Count) return Status.Success; // 다 돌았으면 성공 리턴
+
+            target = points[currentIndex];
             agent.SetDestination(target.position);
         }
-
-        /*Transform target = points[currentIndex];
-        agent.SetDestination(target.position);
-        agent.stoppingDistance = 0;
-
-        if(_isPathCalculating && agent.remainingDistance <= 0.1f)    
-        {
-            ++currentIndex;
-            _isPathCalculating = false;
-        }
-
-        if (agent.pathPending)
-            _isPathCalculating = true;*/
-
-        // 경로 계산 다 됐을 때에만 
-
         return Status.Running;
     }
 

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class Puncher : MonoBehaviour, IDamageable
 {
     [SerializeField] public float _stopDistance;
+    [SerializeField] public float _detectDistance;
     [SerializeField] float _attackTimeout;
 
     //=====Status=====
@@ -24,6 +25,10 @@ public class Puncher : MonoBehaviour, IDamageable
     public event Action OnDeath;
     public bool IsDead { get; private set; }
 
+    //=====States=====
+    public bool IsTargetDetected => _detectDistance >= Vector3.Distance(transform.position, Target.transform.position);
+    public bool IsClose => _stopDistance >= Vector3.Distance(transform.position, Target.transform.position);
+
     //=====UI=====
     [SerializeField] Slider _hpBar; 
 
@@ -37,10 +42,7 @@ public class Puncher : MonoBehaviour, IDamageable
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
 
-        _agent.stoppingDistance = _stopDistance;
-
-        _tree = new BehaviorTree("Puncher");
-        _tree.AddChild(new Leaf("Patrol", new PatrolStrategy(transform, _agent, patrolPoints)));
+        _agent.stoppingDistance = _stopDistance;      
     }
 
     void Start()
@@ -48,13 +50,41 @@ public class Puncher : MonoBehaviour, IDamageable
         _attackTimeoutDelta += Time.deltaTime;
 
         Init();
+        _tree = new BehaviorTree("Puncher");
+        Selector rootSelector = new Selector("RootSelector");
+
+        Sequence patrolSequence = new Sequence("PatrolSequence");
+        patrolSequence.AddChild(new Leaf("NotDetect", new Condition(() => !IsTargetDetected)));
+        patrolSequence.AddChild(new Leaf("Patrol", new PatrolStrategy(transform, _agent, patrolPoints)));
+        rootSelector.AddChild(patrolSequence);
+
+        // 추격
+        Sequence chaseSequence = new Sequence("ChaseSequence");
+        chaseSequence.AddChild(new Leaf("Detect", new Condition(() => IsTargetDetected)));
+        chaseSequence.AddChild(new Leaf("NotClose", new Condition(()=> !IsClose)));
+        chaseSequence.AddChild(new Leaf("Chase", new ActionStrategy(() => _agent.SetDestination(Target.transform.position))));
+        rootSelector.AddChild(chaseSequence);
+
+        // 공격 시퀀스 추가
+        Sequence attackSequence = new Sequence("AttackSequence");
+        attackSequence.AddChild(new Leaf("Close", new Condition(() => IsClose)));
+        attackSequence.AddChild(new Leaf("Attack", new ActionStrategy(Attack)));
+        rootSelector.AddChild(attackSequence);
+
+        _tree.AddChild(rootSelector);
     }
 
     void Update()
     {
         _tree.Process();
         //Chase();
+        CheckWalking();
         _attackTimeoutDelta += Time.deltaTime;
+    }
+
+    private void CheckWalking()
+    {
+        _animator.SetFloat(PuncherAnimatorHashes.WalkBlend, _agent.velocity.magnitude);
     }
 
     private void Init()
@@ -94,10 +124,13 @@ public class Puncher : MonoBehaviour, IDamageable
         }
     }
 
-    private void GiveDamage() // 애니메이션 이벤트
+    private void GiveDamage() // 애니메이션에 달아놓은 이벤트
     {
-        IDamageable target = Target.GetComponent<IDamageable>();
-        target?.TakeDamage(Damage);
+        if(Vector3.Distance(transform.position, Target.transform.position) <= _stopDistance)
+        {
+            IDamageable target = Target.GetComponent<IDamageable>();
+            target?.TakeDamage(Damage);
+        }
     }
 
     public void TakeDamage(int damage)

@@ -9,7 +9,10 @@ public class Leaf : Node
         this.strategy = strategy;
     }
 
-    public override Status Process() => strategy.Process();
-
+    public override Status Process()
+    {
+        Debug.Log(name);
+        return strategy.Process();
+    }
     public override void Reset() => strategy.Reset();
 }
