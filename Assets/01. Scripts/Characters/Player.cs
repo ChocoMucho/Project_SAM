@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour, IDamageable
+public class Player : Entity
 {
     //=====Camera=====
     [SerializeField] private GameObject _aimCamera;
-    [SerializeField] private LayerMask layerMask = new LayerMask();
-    [SerializeField] private Transform _cameraRoot;
     [SerializeField] private GameObject _weaponObject;
     private Vector3 _targetedPosition;
     public Camera MainCamera;
@@ -25,13 +23,6 @@ public class Player : MonoBehaviour, IDamageable
     private Dictionary<string, Rig> _rigLayersDictionanry = new Dictionary<string, Rig>();
     public GameObject TargetObject { get; set; }
 
-    //=====Status=====
-    [SerializeField] StatusSO statusSO;
-    public int MaxHP { get; private set; }
-    public int CurrentHP { get; private set; }
-    public int Damage { get; private set; }
-    public bool IsDead {  get; private set; }
-    public event Action OnDeath;
 
     //=====States=====
     public bool IsRunning => Controller.IsRunning;
@@ -82,65 +73,7 @@ public class Player : MonoBehaviour, IDamageable
             TryReloading();*/
         //Aim();
     }
-
-    private void InitStatus()
-    {
-        MaxHP = statusSO.HP;
-        CurrentHP = statusSO.HP;
-        Damage = statusSO.Damage;
-    }
-
-    private void Aim()
-    {
-        if (Input.Aim && !IsReloading && !IsRunning)
-        {
-            AimControll(true);
-
-            Transform camera = MainCamera.transform;
-            if (Physics.Raycast(camera.position, camera.forward, out RaycastHit hit, 1000))
-            {
-                _targetedPosition = hit.point;
-            }
-
-            Vector3 tempVector = _targetedPosition;
-            tempVector.y = transform.position.y;
-            Vector3 playerDirection = (tempVector - transform.position).normalized;
-
-            transform.forward = Vector3.Lerp(transform.forward, playerDirection, Time.deltaTime * 20f);
-
-            if (Input.Fire && !IsReloading)
-            {
-                Weapon.Fire(_targetedPosition);
-            }
-        }
-        else
-        {
-            AimControll(false);
-        }
-    }
-
-    private void AimControll(bool isAim)
-    {
-        IsAiming = isAim;
-        _aimCamera.SetActive(isAim);
-
-        float layerWeight = Animator.GetLayerWeight(1);
-        if (isAim)
-        {
-            if (layerWeight >= 0.9f)
-                layerWeight = 1.0f;
-            Animator.SetLayerWeight(1, Mathf.Lerp(layerWeight, 1, Time.deltaTime * 10f));
-            SetRigWeight("RigUpperBodyLayer");
-            if (!IsReloading)
-                SetRigWeight("RigHandLayer"); // 장전중일 때 리깅되면 부자연스럽
-        }
-        else
-        {
-            SetRigWeight("RigUpperBodyLayer", 0.0f);
-            SetRigWeight("RigHandLayer", 0.0f);
-        }
-    }
-
+  
     public void Reload()// 애니메이션 이벤트 등록
     {
         if(CurrentAmmo >= Weapon.AmmoCapacity) // 잔탄 넉넉
@@ -191,7 +124,7 @@ public class Player : MonoBehaviour, IDamageable
             Debug.LogWarning($"Rig '{rig.name}' is null.");
     }
 
-    public void TakeDamage(int damage)
+    public override void TakeDamage(int damage)
     {
         if (!IsDead)
         {
@@ -201,7 +134,7 @@ public class Player : MonoBehaviour, IDamageable
             {
                 IsDead = true;
                 CurrentHP = 0;
-                OnDeath?.Invoke();
+                TriggerOnDeath();
                 Animator.SetBool(PlayerAnimatorHashes.Dead, IsDead);
             }
         }

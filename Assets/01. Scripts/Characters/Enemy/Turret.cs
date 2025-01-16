@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Turret : MonoBehaviour, IDamageable
+public class Turret : Enemy
 {
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private float _fireTimeout;
@@ -17,18 +17,10 @@ public class Turret : MonoBehaviour, IDamageable
 
     float _fireAngle = 10f;
 
-    //=====Status=====
-    [SerializeField] StatusSO statusSO;
-    public int MaxHP { get; private set; }
-    public int CurrentHP { get; private set; }
-    public int Damage { get; private set; }
 
-    public GameObject Target;
     private float _fireTimeoutDelta;
     private Vector3 _lookPoint; // 일단 총알 도달할 곳
 
-    public event Action OnDeath;
-    public bool IsDead { get; private set; }
 
     //=====States=====
     public bool IsTargetDetected => _detectDistance >= Vector3.Distance(transform.position, Target.transform.position);
@@ -37,17 +29,26 @@ public class Turret : MonoBehaviour, IDamageable
     //=====UI=====
     [SerializeField] Slider _hpBar;
 
-    //=====Behavior Tree=====
-    BehaviorTree _tree;
-
     void Start()
     {
-        Init();
-        _tree = new BehaviorTree("Turret");
+        InitStatus();
+        InitTree();
+        _hpBar.value = (float)CurrentHP / MaxHP;
+    }
+
+    void Update()
+    {
+        _fireTimeoutDelta += Time.deltaTime;
+        Tree.Process();
+    }
+
+    public override void InitTree()
+    {
+        Tree = new BehaviorTree("Turret");
         Selector rootSelector = new Selector("RootSelector");
 
         Sequence standbySequence = new Sequence("StandbySequence");
-        standbySequence.AddChild(new Leaf("NotDetect", new Condition(()=> !IsTargetDetected)));
+        standbySequence.AddChild(new Leaf("NotDetect", new Condition(() => !IsTargetDetected)));
         standbySequence.AddChild(new Leaf("Standby", new ActionStrategy(Standby)));
         rootSelector.AddChild(standbySequence);
 
@@ -63,22 +64,7 @@ public class Turret : MonoBehaviour, IDamageable
         fireSequence.AddChild(new Leaf("Fire", new ActionStrategy(Fire)));
         rootSelector.AddChild(fireSequence);
 
-        _tree.AddChild(rootSelector);
-    }
-
-    void Update()
-    {
-        _fireTimeoutDelta += Time.deltaTime;
-        _tree.Process();
-    }
-
-    private void Init()
-    {
-        MaxHP = statusSO.HP;
-        CurrentHP = statusSO.HP;
-        Damage = statusSO.Damage;
-        IsDead = false;
-        _hpBar.value = (float)CurrentHP / MaxHP;
+        Tree.AddChild(rootSelector);
     }
 
     private void Standby()
@@ -126,7 +112,7 @@ public class Turret : MonoBehaviour, IDamageable
         }     
     }
 
-    public void TakeDamage(int damage)
+    public override void TakeDamage(int damage)
     {
         if (!IsDead)
         {
@@ -146,6 +132,6 @@ public class Turret : MonoBehaviour, IDamageable
     {
         IsDead = true;
         CurrentHP = 0;
-        OnDeath?.Invoke();
+        TriggerOnDeath();
     }
 }

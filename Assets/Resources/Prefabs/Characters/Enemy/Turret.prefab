@@ -134,6 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dce1c93f8c9d2ce4fae157b6e6fc11de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statusSO: {fileID: 11400000, guid: 1ef1e91765a5dac408979eaaa41dad8e, type: 2}
   _rotationSpeed: 1.5
   _fireTimeout: 0.1
   _turretCenter: {fileID: 7809386166516948797}
@@ -144,7 +145,7 @@ MonoBehaviour:
   _impactEffect: {fileID: 5680133796171520803, guid: 85ddbf283cb52194788987f79753a87c, type: 3}
   _muzzleEffect: {fileID: 8035637489900155672, guid: 50f42be4c55d14f4ba05c57613cfb40e, type: 3}
   _detectRange: 10
-  statusSO: {fileID: 11400000, guid: 1ef1e91765a5dac408979eaaa41dad8e, type: 2}
+  _detectDistance: 20
   Target: {fileID: 0}
   _hpBar: {fileID: 8698969020465671935}
 --- !u!65 &441615368171299451
@@ -457,9 +458,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2836118438300304716}
     m_Modifications:
+    - target: {fileID: 273994439980989527, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 536480329733939513, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 974056762920721289, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2059558923235640395, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
       propertyPath: m_Name
       value: HpBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 2059558923235640395, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2640658270947902194, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3598426148973751410, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
       propertyPath: m_PresetInfoIsWorld
@@ -544,6 +565,10 @@ PrefabInstance:
     - target: {fileID: 4240492032577003752, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811209957678579166, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6712071919661792935, guid: dd8cba0e2fbeb68499f82b5ae9e415de, type: 3}
       propertyPath: m_AnchorMax.x

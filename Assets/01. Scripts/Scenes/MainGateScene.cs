@@ -4,7 +4,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using Unity.AI.Navigation;
 
-public enum Enemy
+public enum EnemyType
 {
     Turret,
     Puncher,
@@ -99,7 +99,7 @@ public class MainGateScene : BaseScene
 
     IEnumerator SpawnRoutine() // 얘 호출되면 스포닝 시작
     {
-        SpwanEnemy(Enemy.Turret, 1);
+        SpwanEnemy(EnemyType.Turret, 1);
         //SpwanEnemy(Enemy.Puncher, 1);
         yield return new WaitForSeconds(3f);
 
@@ -107,7 +107,7 @@ public class MainGateScene : BaseScene
     }
 
     // 1. 스폰 카운트 증가 2. 플레이어 참조시키기
-    private void SpwanEnemy(Enemy enemy, int count = 1)
+    private void SpwanEnemy(EnemyType enemy, int count = 1)
     {
         Vector3 spawnPoint;
         for (int i = 0; i < count; ++i)
@@ -115,17 +115,19 @@ public class MainGateScene : BaseScene
             spawnPoint = spawnPoints.Dequeue();
             spawnPoints.Enqueue(spawnPoint);
             GameObject go = Instantiate(_enemyFrefabs[(int)enemy], spawnPoint, Quaternion.identity);
-            
-            if (enemy == Enemy.Turret) // enemy 상속으로 완전 개선 필요
+
+            go.GetComponent<Enemy>().Target = _player;
+            go.GetComponent<Turret>().OnDeath += IncreaseKillCount;
+
+            /*if (enemy == EnemyType.Turret) // enemy 상속으로 완전 개선 필요
             {
-                go.GetComponent<Turret>().Target = _player;
-                go.GetComponent<Turret>().OnDeath += IncreaseKillCount;
+                
             }
             else
             {
                 go.GetComponent<Puncher>().Target = _player;
                 go.GetComponent<Puncher>().OnDeath += IncreaseKillCount;
-            }
+            }*/
 
             // 스폰 카운트 증가
             ++_spawnCount;
