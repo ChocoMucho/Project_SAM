@@ -38,7 +38,11 @@ public class MainGateScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = Scene.Battle;
+        SceneType = Scene.MainGate;
+
+        // UI
+        UIManager.Instance.Regist("UI_PlayerStatus");
+        UIManager.Instance.Show("UI_PlayerStatus");
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

@@ -5,7 +5,7 @@ public enum Scene
 {
     Unknown,
     Main,
-    Battle,
+    MainGate,
 }
 
 public abstract class BaseScene : MonoBehaviour

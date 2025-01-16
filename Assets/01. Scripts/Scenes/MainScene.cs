@@ -5,16 +5,23 @@ public class MainScene : BaseScene
     GameManager gameManager;
     public override void Clear()
     {
-        throw new System.NotImplementedException();
+        UIManager.Instance.Clear();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Init()
     {
+        base.Init();
         gameManager = GameManager.Instance;
+        SceneType = Scene.Main;
+
+        // UI
+        UIManager.Instance.Regist("UI_StartButton");
+        UIManager.Instance.Show("UI_StartButton");
+        UIManager.Instance.Regist("UI_QuitButton");
+        UIManager.Instance.Show("UI_QuitButton");
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         
