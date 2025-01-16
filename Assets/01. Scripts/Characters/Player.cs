@@ -49,9 +49,6 @@ public class Player : MonoBehaviour, IDamageable
     //=====FSM=====
     public StateMachine stateMachine { get; private set; }
 
-    //=====UI=====
-    [SerializeField] private Image _hpBar;
-    [SerializeField] private Text _ammo;
 
     private void Awake()
     {
@@ -78,7 +75,6 @@ public class Player : MonoBehaviour, IDamageable
 
     void Update()
     {
-        UpdateUI();
         if (IsDead) return;
 
         //CheckRun();
@@ -213,11 +209,6 @@ public class Player : MonoBehaviour, IDamageable
             return;
     }
 
-    private void UpdateUI()
-    {
-        _hpBar.fillAmount = (float)CurrentHP / MaxHP;
-        _ammo.text = $"{Weapon.CurrentAmmo} / {CurrentAmmo}";
-    }
 
     // 달리면 장전 애니메이션, 장전 상태 다 제한 걸어야 해서 만듦
     /*private void CheckRun() // TODO: 진짜 조정 필요.
